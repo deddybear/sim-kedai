@@ -10,4 +10,12 @@ class UserActivityController extends Controller
     public function index(){
         return view('user-activity');
     }
+
+    public function dataActivity(Request $req){
+        # code...
+    }
+
+    public function getActivity($id){
+        # code...
+    }
 }

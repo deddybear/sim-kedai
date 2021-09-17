@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DataPenjualanController;
-use App\Http\Controllers\DataPembelianController;
+use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\StockBahanController;
 use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,38 +25,69 @@ Route::get('/', function (){
     return redirect('/dashboard');
 });
 
-Route::prefix('dashboard')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-
-    Route::prefix('transaksi')->group(function () {
-        Route::get('/', function() {
-            return redirect('/dashboard');
+// Route untuk mengarah ke halaman dari controller
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [HomeController::class, 'index'])->name('home');
+    
+        Route::prefix('transaksi')->group(function () {
+            Route::get('/', function() {
+                return redirect('/dashboard');
+            });
+    
+            Route::get('penjualan', [PenjualanController::class, 'index']);
+            Route::get('pembelian', [PembelianController::class, 'index']);
+        });
+    
+        Route::middleware(['owner'])->group(function () {
+            Route::get('/stock', [StockBahanController::class, 'index']);
+            Route::get('/laporan', [LaporanController::class, 'index']);
+            Route::get('/activity', [UserActivityController::class, 'index']);
         });
 
-        Route::get('penjualan', [DataPenjualanController::class, 'index']);
-        Route::get('pembelian', [DataPembelianController::class, 'index']);
+        Route::get('/settings', [SettingsController::class, 'index']);
+    });
+});
+
+// Route yang mengarah fungsi dari controller
+
+Route::prefix('transaksi')->group(function () {
+    Route::prefix('penjualan')->group(function () {
+        Route::get('/', [PenjualanController::class, 'data'])->name('data-jual');
+        Route::post('/', [PenjualanController::class, 'create'])->name('create-jual');
+        Route::get('/{id}', [PenjualanController::class, 'show'])->name('show-jual');
+        Route::put('/{id}', [PenjualanController::class, 'update'])->name('update-jual');
+        Route::delete('/{id}', [PenjualanController::class, 'delete'])->name('delete-jual');
     });
 
-    Route::get('/stock', [StockBahanController::class, 'index']);
-    Route::get('/laporan', [LaporanController::class, 'index']);
-    Route::get('/activity', [UserActivityController::class, 'index']);
-
+    Route::prefix('pembelian')->group(function () {
+        Route::get('/', [PembelianController::class, 'data'])->name('data-beli');
+        Route::post('/', [PembelianController::class, 'create'])->name('create-beli');
+        Route::get('/{id}', [PembelianController::class, 'show'])->name('show-beli');
+        Route::put('/{id}', [PembelianController::class, 'update'])->name('update-beli');
+        Route::delete('/{id}', [PembelianController::class, 'delete'])->name('delete-beli');
+    });
 });
 
-// Route::prefix('stock')->group(function () {
-       
-        
-// });
-
-// Route::prefix('laporan')->group(function () {
-    
-// });
-
-// Route::prefix('activity')->group(function () {
-   
-// });
+Route::prefix('stock')->group(function () {
+    Route::get('/', [StockBahanController::class, 'data'])->name('data-stock');
+    Route::post('/', [StockBahanController::class, 'create'])->name('create-stock');
+    Route::get('/{id}', [StockBahanController::class, 'show'])->name('show-stock');
+    Route::put('/{id}', [StockBahanController::class, 'update'])->name('update-stock');
+    Route::delete('/{id}', [StockBahanController::class, 'delete'])->name('delete-stock');
+});
 
 Route::prefix('laporan')->group(function () {
-    Route::post('/', [LaporanController::class, 'FunctionName'])->name('download-laporan');
+    Route::post('/', [LaporanController::class, 'downloadReport'])->name('download-report');
 });
 
+Route::prefix('activity')->group(function () {
+    Route::get('/', [UserActivityController::class, 'dataActivity'])->name('data-activity');
+    Route::get('/{id}', [UserActivityController::class, 'getActivity'])->name('get-activity');
+});
+
+Route::prefix('settings')->group(function () {
+    Route::put('/name/{id}', [SettingsController::class, 'changeName'])->name('change-name');
+    Route::put('/password/{id}', [SettingsController::class, 'changePassword'])->name('change-password');
+    Route::put('/email/{id}', [SettingsController::class, 'changeEmail'])->name('change-email');
+});

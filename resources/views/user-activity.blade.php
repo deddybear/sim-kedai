@@ -4,11 +4,14 @@
 @section('title-header', 'User Activity')
 
 @section('css')
-    
+    <link rel="stylesheet" href="{{ asset('/plugins/dataTables/datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('/plugins/sweetalert2/sweetalert2.css') }}">
 @endsection
 
 @section('script')
-    
+    <script src="{{ asset('/plugins/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('/plugins/dataTables/datatables.js') }}"></script>
+    <script src="{{ asset('/pages/activity/script.js') }}"></script>
 @endsection
 
 @section('content')
@@ -32,7 +35,7 @@
                                 <th>isi</th>
                                 <th>isi</th>
                                 <th>
-                                    <a href="javascript:;" class="btn btn-xs btn-success show_data"><i class="fas fa-eye"></i> Lihat Selengkapnya</a>
+                                    <a href="javascript:;" class="btn btn-xs btn-success show"><i class="fas fa-eye"></i> Lihat Selengkapnya</a>
                                 </th>
                             </tr>
                         </tbody>

@@ -1,0 +1,25 @@
+.none {
+    display: none;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+.list-group-item {
+    background-color: unset !important;
+}
+
+.no-decoration {
+    text-decoration: none;
+    color: #212529;
+}
+
+.no-decoration:hover {
+    color: #212529;
+}
+
+.list-group-item:hover {
+    cursor: pointer;
+    background-color: darkgray !important;
+}

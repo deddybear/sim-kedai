@@ -44,7 +44,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="/dashboard" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -78,6 +78,7 @@
                                 <p>Stok Bahan Baku</p>
                             </a>
                         </li>
+                        @if (Auth::user()->roles == 1)
                         <li class="nav-item">
                             <a href="/dashboard/laporan" class="nav-link">
                                 <i class="fas fa-clipboard-list nav-icon"></i>
@@ -90,6 +91,7 @@
                                 <p>User Activity</p>
                             </a>
                         </li>
+                        @endif
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-user-cog"></i>
@@ -100,7 +102,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/dashboard/edit-akun" class="nav-link">
+                                    <a href="/dashboard/settings" class="nav-link">
                                         <i class="fas fa-user-edit nav-icon"></i>
                                         <p>Edit Akun</p>
                                     </a>

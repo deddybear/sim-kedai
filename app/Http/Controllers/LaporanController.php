@@ -11,7 +11,7 @@ class LaporanController extends Controller
         return view('laporan');
     }
 
-    public function FunctionName(Request $req){
+    public function downloadReport(Request $req){
         dd($req);
     }
 }

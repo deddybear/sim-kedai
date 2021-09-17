@@ -22,13 +22,13 @@
             <div class="card-body">
                 <p>Laporan ini otomatis generate sesuai dengan transaksi yang telah dilakukan pada halaman data transaksi.</p>
                 <div class="mt-5">
-                    <form action="{{ route('download-laporan') }}" method="POST">
+                    <form action="{{ route('download-report') }}" method="POST">
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-12 col-lg-4">
                                 <label for="bulan">Bulan</label>
                                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                                    <input name="month" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
                                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
@@ -37,7 +37,7 @@
                             <div class="form-group col-12 col-lg-4">
                                 <label for="tahun">Tahun</label>
                                 <div class="input-group date" id="datetimepicker" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
+                                    <input name="year" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
                                     <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>

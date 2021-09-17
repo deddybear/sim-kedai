@@ -4,11 +4,14 @@
 @section('title-header', 'Transaksi Pembelian')
 
 @section('css')
-    
+    <link rel="stylesheet" href="{{ asset('/plugins/dataTables/datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('/plugins/sweetalert2/sweetalert2.css') }}">
 @endsection
 
 @section('script')
-    
+    <script src="{{ asset('/plugins/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('/plugins/dataTables/datatables.js') }}"></script>
+    <script src="{{ asset('/pages/pembelian/script.js') }}"></script>
 @endsection
 
 @section('content')
@@ -17,7 +20,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="pull-right my-3" style="float: right">
-                    <a id="tambahdata" href="#" class="btn btn-sm btn-success" data-toggle="modal"
+                    <a id="add" href="#" class="btn btn-sm btn-success" data-toggle="modal"
                         data-target="#modal_form">
                         <span class="fa fa-plus"></span> Tambahkan Data 
                     </a>
@@ -42,8 +45,8 @@
                                 <th>isi</th>
                                 <th>isi</th>
                                 <th>
-                                    <a href="javascript:;" class="btn btn-xs btn-warning show_data">Edit</a>
-                                    <a href="javascript:;" class="btn btn-xs btn-danger show_data">Hapus</a>
+                                    <a href="javascript:;" class="btn btn-xs btn-warning edit" data="edit">Edit</a>
+                                    <a href="javascript:;" class="btn btn-xs btn-danger delete" data="delete">Hapus</a>
                                 </th>
                             </tr>
                         </tbody>
@@ -108,8 +111,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="ok">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="btn-cancel" type="button" class="btn btn-secondary" data-dismiss="modal"></button>
+                        <button id="btn-confrim" type="submit" class="btn btn-primary"></button>
                     </div>
                 </form>
             </div>
