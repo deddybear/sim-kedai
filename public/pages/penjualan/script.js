@@ -1,50 +1,233 @@
 $(document).ready(function () {
+    moment.locale("id");
+    let method;
+    let id;
 
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-        }
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
     });
 
-    $('#dataTable').DataTable()
+    const idrFormatter = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+    });
+
+    let type = [
+        "category",
+        "name_product",
+        "amount",
+        "created_at",
+        "updated_at",
+    ];
 
     function domModal(textTitle, textConfrim, textClose) {
-        $('.modal-title').html(textTitle)
-        $('#btn-confrim').html(textConfrim)
-        $('#btn-cancel').html(textClose)
+        $(".modal-title").html(textTitle);
+        $("#btn-confrim").html(textConfrim);
+        $("#btn-cancel").html(textClose);
     }
-    
-    $('#add').click(function() {
-        domModal('Menambah Data Penjualan', 'Simpan', 'Batalkan')
-    })
 
-    $('tbody').on('click', '.edit', function() {
-        $('#form')[0].reset()
-        let id = $(this).attr('data')
-        console.log(id)
-        domModal('Edit Transaksi Penjualan', 'Simpan Perubahan', 'Batalkan')
-        $('#modal_form').modal('show')
+    $(".date").datepicker({
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
     });
 
-    $('tbody').on('click', '.delete', function() { 
-        let id = $(this).attr('data')
+    $("#dataTable").DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "/transaksi/penjualan",
+        columns: [
+            {
+                data: "DT_RowIndex",
+                name: "DT_RowIndex",
+                orderable: false,
+                searchable: false,
+            },
+            { data: "category", name: "category" },
+            { data: "name_product", name: "name_product" },
+            { data: "amount", name: "amount" },
+            {
+                data: function (row) {
+                    return idrFormatter.format(row.nominal);
+                },
+                name: "nominal",
+            },
+            {
+                data: function (row) {
+                    return idrFormatter.format(row.total);
+                },
+                name: "total",
+            },
+            { data: "created_at", name: "created_at" },
+            { data: "updated_at", name: "updated_at" },
+            {
+                data: "Actions",
+                name: "Actions",
+                orderable: false,
+                serachable: false,
+                sClass: "text-center",
+            },
+        ],
+        initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    var that = this;
+                    $("input", this.footer()).on(
+                        "keyup change clear",
+                        function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        }
+                    );
+                });
+        },
+    });
+
+    $("#dataTable tfoot .search").each(function (i) {
+        $(this).html(`<input 
+                type="text" 
+                data-type="${type[i]}" 
+                class="autocomplete_f text-sm form-control" 
+                placeholder="Search ${type[i].replace("_", " ").toUpperCase()}"
+        />`);
+    });
+
+    $(document).on("focus", ".autocomplete_f", function () {
+        let type = $(this).data("type");
+        console.log(type);
+        $(this).autocomplete({
+            minLength: 3,
+            max: 10,
+            scroll: true,
+            source: function (request, response) {
+                $.ajax({
+                    url: `/transaksi/penjualan/search`,
+                    dataType: "JSON",
+                    data: {
+                        keyword: request.term,
+                        type: type,
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        let array = [];
+                        let index = 0;
+
+                        $.map(data, function (item) {
+                            array[index++] = item[type];
+                        });
+
+                        response(array);
+                    },
+                    error: function (err) {
+                        response(["Tidak Ditemukan di Database"]);
+                    },
+                });
+            },
+        });
+    });
+
+    // $.ajax({
+    //     method: 'GET',
+    //     url: '/test',
+    //     success: function(data) {
+    //         for (let index = 0; index < data.length; index++) {
+    //                 if (data[index] == 'amount' || 'category' || '') {
+
+    //                 }
+
+    //         }
+    //     }
+    // })
+
+    $("#add").click(function () {
+        $("#form")[0].reset();
+        domModal("Menambah Data Penjualan", "Simpan", "Batalkan");
+        method = "POST";
+    });
+
+    $("tbody").on("click", ".edit", function () {
+        method = "PUT";
+        id = $(this).attr("data");
+        $("#form")[0].reset();
+        domModal("Edit Transaksi Penjualan", "Simpan Perubahan", "Batalkan");
+        $("#modal_form").modal("show");
+    });
+
+    $("tbody").on("click", ".detail", function () {
+        id = $(this).attr("data");
+
+        $.ajax({
+            url: `/transaksi/penjualan/show/${id}`,
+            method: "GET",
+            dataType: "JSON",
+            beforeSend: function () {},
+            complete: function () {},
+            success: function (data) {
+                console.log(data);
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Informasi Mengenai Produk',
+                    html:`
+                         <b> Nama Product :</b> ${data.name_product} <br>
+                         <b> Kategori :</b> ${data.category} <br>
+                         <b> Jumlah :</b> ${data.amount} <br>
+                         <b> Harga Satuan :</b> ${idrFormatter.format(data.nominal)} <br>
+                         <b> Total :</b> ${idrFormatter.format(data.total)} <br>
+                         <b> Created By :</b> ${data.created_by[0].name} <br>
+                         <b> Updated By :</b> ${data.updated_by[0].name} <br>
+                         <b> Created At :</b> ${moment(data.created_at).format('YYYY-DD-MM hh:mm:ss')} <br>
+                         <b> Updated At :</b> ${moment(data.updated_at).format('YYYY-DD-MM hh:mm:ss')}`,
+                    showCloseButton: true,
+                });
+            },
+            error: function (err) {},
+        });
+    });
+
+    $("#form").on("submit", function (e) {
+        e.preventDefault();
+        var url;
+        if (method == "POST") {
+            url = "/transaksi/penjualan";
+        } else if (method == "PUT") {
+            url = `/transaksi/penjualan/update/${id}`;
+        }
+
+        $.ajax({
+            url: url,
+            method: method,
+            dataType: "JSON",
+            data: $("#form").serialize(),
+            beforeSend: function () {},
+            complete: function () {},
+            success: function (data) {
+                Swal.fire("Sukses!", data.success, "success");
+            },
+            error: function (response) {},
+        });
+    });
+
+    $("tbody").on("click", ".delete", function () {
+        let id = $(this).attr("data");
         console.log(id);
         Swal.fire({
-            title: 'Are you sure?',
+            title: "Are you sure?",
             text: "You won't be able to revert this!",
-            icon: 'warning',
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-          }).then((result) => {
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
             if (result.isConfirmed) {
-              Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-              )
+                Swal.fire("Deleted!", "Your file has been deleted.", "success");
             }
-          })
-    })
-})
+        });
+    });
+});

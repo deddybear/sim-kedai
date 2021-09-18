@@ -14,7 +14,7 @@ class TblUsers extends Migration
     public function up()
     {
         Schema::create('tbl_users', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('email')->unique();
             $table->string('password', 255);
             $table->string('name', 150);

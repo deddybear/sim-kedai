@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     
     <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('/plugins/jquery-ui/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/ionicons/css/ionicons.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/bootstrap/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/adminlte/adminlte.css') }}">
@@ -166,6 +167,7 @@
     </div>
 </body>
 <script src="{{ asset('/plugins/jquery-3.5.1.js') }}"></script>
+<script src="{{ asset('/plugins/jquery-ui/jquery-ui.js') }}"></script>
 <script src="{{ asset('/plugins/bootstrap/bootstrap.bundle.js') }}"></script>
 <script src="{{ asset('/plugins/adminlte/adminlte.js') }}"></script>
 <script src="{{ asset('/plugins/popper.min.js') }}"></script>

@@ -13,7 +13,14 @@ class TblActivity extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('tbl_activitys', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('user_id')->index();
+            $table->text('activity');
+            $table->timestamp('created_at');
+
+            // $table->foreign('user_id')->references('id')->on('tbl_users');
+        });
     }
 
     /**
@@ -23,6 +30,6 @@ class TblActivity extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('tbl_activitys');
     }
 }
