@@ -20,7 +20,7 @@ class TblStock extends Migration
             $table->string('name_product', 255);
             $table->string('category', 20);
             $table->unsignedInteger('amount');
-            $table->string('satuan')->nullable();
+            $table->string('unit')->nullable();
             $table->timestamps();
 
             // $table->foreign('created_by')->references('id')->on('tbl_users');

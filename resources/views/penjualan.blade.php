@@ -38,8 +38,6 @@
                                 <th>Total</th>
                                 <th>Tanggal Dibuat</th>
                                 <th>Tanggal Diupdate</th>
-                                {{-- <th>Dibuat Oleh</th>
-                                <th>Diupdate Oleh</th> --}}
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -72,16 +70,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="pesan_sistem my-2">
-                <span id="result"></span>
-            </div>
             <div class="modal-body">
-                <span id="result"></span>
                 <form class="form-horizontal" id="form">
                     <div class="form-body p-3">
-                        <div class="pesan_sistem my-1">
-                            <span id="result"></span>
-                        </div>
                         {{-- Nama Produk --}}
                         <div class="form-group">
                             <label class="control-label col-md-5">Nama Produk</label>
@@ -90,11 +81,12 @@
                                     placeholder="Nama Produk" required>
                             </div>
                         </div>
+
                         {{-- Kategori --}}
                         <div class="form-group">
                             <label class="control-label col-md-5">Kategori</label>
                             <div class="col-md-12">
-                                <select class="form-control" name="category">
+                                <select class="form-control" name="category" required>
                                     <option value="" selected>Silahkan Dipilih</option>
                                     <option value="Blended Coffe">Blended Coffe</option>
                                     <option value="Mixology Bar">Mixology Bar</option>
@@ -104,11 +96,12 @@
                                 </select>
                             </div>
                         </div>
+
                         {{-- Jumlah --}}
                         <div class="form-group">
                             <label class="control-label col-md-5">Jumlah</label>
                             <div class="col-md-12">
-                                <input type="number" class="form-control" name="jumlah" id="jumlah" min="1" max="100"
+                                <input type="number" class="form-control" name="jumlah" id="jumlah" min="1" max="1000"
                                     placeholder="Jumlah" required>
                             </div>
                         </div>
@@ -117,10 +110,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Harga Satuan</label>
                             <div class="col-md-12">
-                                <input type="number" class="form-control" name="harga_satuan" id="harga_satuan" min="1"
-                                    placeholder="Harga Satuan" required>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" name="harga_satuan" id="harga_satuan" min="1"
+                                        placeholder="Harga Satuan" required>
+                                    </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button id="btn-cancel" type="button" class="btn btn-secondary" data-dismiss="modal"></button>

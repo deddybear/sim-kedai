@@ -3,11 +3,26 @@ $(document).ready(function () {
     let method;
     let id;
 
+    // $('#harga_satuan').mask('000.000.000.000.000', {reverse: true})
+
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
+
+    let message = messageErrors => {
+        var temp = '';
+        if (messageErrors instanceof Array) {
+                messageErrors.forEach(element => {
+                    temp += `${element} <br>`
+                });
+                return temp;
+        } else {
+            return messageErrors ? `${messageErrors} <br>` : ' '
+        }
+       
+    }
 
     const idrFormatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -131,19 +146,6 @@ $(document).ready(function () {
         });
     });
 
-    // $.ajax({
-    //     method: 'GET',
-    //     url: '/test',
-    //     success: function(data) {
-    //         for (let index = 0; index < data.length; index++) {
-    //                 if (data[index] == 'amount' || 'category' || '') {
-
-    //                 }
-
-    //         }
-    //     }
-    // })
-
     $("#add").click(function () {
         $("#form")[0].reset();
         domModal("Menambah Data Penjualan", "Simpan", "Batalkan");
@@ -168,7 +170,7 @@ $(document).ready(function () {
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
-                console.log(data);
+                // console.log(data);
 
                 Swal.fire({
                     icon: 'info',
@@ -193,6 +195,7 @@ $(document).ready(function () {
     $("#form").on("submit", function (e) {
         e.preventDefault();
         var url;
+
         if (method == "POST") {
             url = "/transaksi/penjualan";
         } else if (method == "PUT") {
@@ -207,26 +210,62 @@ $(document).ready(function () {
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
-                Swal.fire("Sukses!", data.success, "success");
+                console.log(data);
+                if (data.success) {
+                    Swal.fire("Sukses!", data.success, "success");
+                    location.reload();
+                }
             },
-            error: function (response) {},
+            error: function (response) {
+                var text = '';
+            
+                for (key in response.responseJSON.errors) {
+                    text += message(response.responseJSON.errors[key]);                    
+                }
+                
+                Swal.fire(
+                    'Whoops ada Kesalahan',
+                    `Error : <br> ${text}`,
+                    'error'
+                )
+            },
         });
     });
 
     $("tbody").on("click", ".delete", function () {
         let id = $(this).attr("data");
-        console.log(id);
+
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: "Apakah kamu yakin ??",
+            text: "Setelah terhapus, ini tidak bisa dikembalikan lagi!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "Saya Setuju!",
+            cancelButtonText: "Batalkan"
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                $.ajax({
+                    url: `/transaksi/penjualan/delete/${id}`,
+                    method: 'DELETE',
+                    dataType: 'JSON',
+                    beforeSend: function () {},
+                    complete: function () {},
+                    success: function (data) {
+                        Swal.fire("Deleted!", data.success, "success");
+                        location.reload();
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Whoops ada Kesalahan',
+                            `Error : Mohon dicoba lagi`,
+                            'error'
+                        )
+                    }
+                })
+            } else {
+                Swal.fire("Batal !","Opreasi penghapusan dibatalkan", "warning")
             }
         });
     });

@@ -17,7 +17,7 @@ class TblExpenditure extends Migration
             $table->uuid('id')->primary();
             $table->uuid('created_by')->index();
             $table->uuid('updated_by')->index();
-            $table->string('name_product', 255);
+            $table->string('description', 255);
             $table->string('category', 20);
             $table->unsignedDecimal('nominal', 13, 0);
             $table->unsignedInteger('amount');

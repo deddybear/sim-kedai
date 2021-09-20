@@ -9,6 +9,7 @@
 @endsection
 
 @section('script')
+    <script src="{{ asset('/plugins/moment-with-locales.js') }}"></script>  
     <script src="{{ asset('/plugins/sweetalert2/sweetalert2.js') }}"></script>
     <script src="{{ asset('/plugins/dataTables/datatables.js') }}"></script>
     <script src="{{ asset('/pages/pembelian/script.js') }}"></script>
@@ -30,26 +31,29 @@
                         <thead>
                             <tr>
                                 <th>No. </th>
-                                <th>Kolom 1</th>
-                                <th>Kolom 2</th>
-                                <th>Kolom 3</th>
-                                <th>Kolom 4</th>
+                                <th>Kategori</th>
+                                <th>Keterangan</th>
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                                <th>Total</th>
+                                <th>Tanggal Dibuat</th>
+                                <th>Tanggal Diupdate</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>1</th>
-                                <th>isi</th>
-                                <th>isi</th>
-                                <th>isi</th>
-                                <th>isi</th>
-                                <th>
-                                    <a href="javascript:;" class="btn btn-xs btn-warning edit" data="edit">Edit</a>
-                                    <a href="javascript:;" class="btn btn-xs btn-danger delete" data="delete">Hapus</a>
-                                </th>
-                            </tr>
                         </tbody>
+                        <tfoot>
+                            <th></th>
+                            <th class="search"></th>
+                            <th class="search"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th><input type="text" class="date text-sm form-control" placeholder="Search Date"></th>
+                            <th><input type="text" class="date text-sm form-control" placeholder="Search Date"></th>
+                            <th></th>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -66,49 +70,65 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="pesan_sistem my-2">
-                <span id="result"></span>
-            </div>
             <div class="modal-body">
                 <span id="result"></span>
-                <form class="form-horizontal" method="post" id="form">
+                <form class="form-horizontal" id="form">
                     <div class="form-body p-3">
-                        <div class="pesan_sistem my-2">
-                            <span id="result"></span>
-                        </div>
-                        {{-- form-judul --}}
+
+                        {{-- Deskripsi --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Deskripsi</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="nama" id="nama"
-                                    placeholder="" required>
+                                <input type="text" class="form-control" name="description" id="description"
+                                    placeholder="Deskripsi" required>
                             </div>
                         </div>
-            
+
+                        {{-- Kategori --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Kategori</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="kelas" id="kelas"
-                                    placeholder="" required>
+                                <select class="form-control" name="category" required>
+                                    <option value="" selected>Silahkan Dipilih</option>
+                                    <option value="Bahan Baku">Bahan Baku</option>
+                                    <option value="Tools/Peralatan">Tools/Peralatan</option>
+                                </select>
                             </div>
                         </div>
-                        {{-- NIS --}}
+
+                        {{-- Jumlah --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Jumlah</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="nis" id="nis"
-                                    placeholder="" required>
+                                <input type="number" class="form-control" name="jumlah" id="jumlah" min="1" max="1000"
+                                    placeholder="Jumlah" required>
+                            </div>
+                        </div>
+
+                        {{-- Satuan --}}
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Satuan</label>
+                            <div class="col-md-12">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Satuan</span>
+                                    <input type="text" class="form-control" name="satuan" id="satuan" 
+                                    placeholder="Kg / Pcs" required>
+                                </div>
                             </div>
                         </div>
     
-                        {{-- NISN --}}
+                        {{-- Harga --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Harga Satuan</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="nisn" id="nisn"
-                                    placeholder="" required>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" name="harga_satuan" id="harga_satuan" min="1"
+                                        placeholder="Harga Satuan" required>
+                                    </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="modal-footer">
                         <button id="btn-cancel" type="button" class="btn btn-secondary" data-dismiss="modal"></button>

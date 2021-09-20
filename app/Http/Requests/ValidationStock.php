@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ValidationPenjualan extends FormRequest
+class ValidationStock extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,10 @@ class ValidationPenjualan extends FormRequest
     {
         return [
             'name_product' => 'required|string|between:3,255',
-            'category'     => 'required|string|between:3,20',
-            'jumlah'       => 'required|numeric|min:1',
-            'harga_satuan' => 'required|numeric|min:1'
+            'category'    => 'required|string|between:3,20',
+            'jumlah'      => 'required|numeric|min:1',
+            'satuan'      => 'required|string|between:2,30',
+
         ];
     }
 
@@ -43,9 +44,9 @@ class ValidationPenjualan extends FormRequest
             'jumlah.required'       => 'Silahkan isi jumlah produk, Tidak boleh kosong',
             'jumlah.numeric'        => 'Silahkan isi dengan benar jumlah produk dengan angka',
             'jumlah.min'            => 'Minimal jumlah produk adalah 1',
-            'harga_satuan.required' => 'Silahkan isi harga satuan produk, Tidak boleh kosong',
-            'harga_satuan.numeric'  => 'Silahkan isi harga satuan produk, dengan angka',
-            'harga_satuan.min'      => 'Minimal Harga satuan adalah 1'
+            'satuan.required'       => 'Silahkan isi Satuan, Tidak boleh kosong',
+            'satuan.string'         => 'Silahkan isi Satuan dengan benar',
+            'satuan.between'        => 'Text satuan harus anatara 2 huruf sampai 30',
         ];
     }
 

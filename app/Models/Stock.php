@@ -15,7 +15,11 @@ class Stock extends Model
     protected $table = 'tbl_stocks';
     protected $guarded = [];
 
-    public function users(){
-        return $this->belongsToMany(User::class);
+    public function createdBy(){
+        return $this->hasMany(User::class, 'id', 'created_by');
+    }
+
+    public function updatedBy(){
+        return $this->hasMany(User::class, 'id', 'updated_by');
     }
 }

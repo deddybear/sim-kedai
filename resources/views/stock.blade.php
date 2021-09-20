@@ -5,9 +5,12 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('/plugins/dataTables/datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('/plugins/sweetalert2/sweetalert2.css') }}">
 @endsection
 
 @section('script')
+    <script src="{{ asset('/plugins/moment-with-locales.js') }}"></script>  
+    <script src="{{ asset('/plugins/sweetalert2/sweetalert2.js') }}"></script>
     <script src="{{ asset('/plugins/dataTables/datatables.js') }}"></script>
     <script src="{{ asset('/pages/stock/script.js') }}"></script>
 @endsection
@@ -18,7 +21,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="pull-right my-3" style="float: right">
-                    <a id="tambahdata" href="#" class="btn btn-sm btn-success" data-toggle="modal"
+                    <a id="add" href="#" class="btn btn-sm btn-success" data-toggle="modal"
                         data-target="#modal_form">
                         <span class="fa fa-plus"></span> Tambahkan Data 
                     </a>
@@ -28,26 +31,27 @@
                         <thead>
                             <tr>
                                 <th>No. </th>
-                                <th>Kolom 1</th>
-                                <th>Kolom 2</th>
-                                <th>Kolom 3</th>
-                                <th>Kolom 4</th>
+                                <th>Jenis</th>
+                                <th>Nama Barang</th>
+                                <th>Jumlah</th>
+                                <th>Satuan</th>
+                                <th>Tanggal Dibuat</th>
+                                <th>Tanggal Diupdate</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>1</th>
-                                <th>isi</th>
-                                <th>isi</th>
-                                <th>isi</th>
-                                <th>isi</th>
-                                <th>
-                                    <a href="javascript:;" class="btn btn-xs btn-warning show_data">Edit</a>
-                                    <a href="javascript:;" class="btn btn-xs btn-danger show_data">Hapus</a>
-                                </th>
-                            </tr>
                         </tbody>
+                        <tfoot>
+                            <th></th>
+                            <th class="search"></th>
+                            <th class="search"></th>
+                            <th></th>
+                            <th></th>
+                            <th><input type="text" class="date text-sm form-control" placeholder="Search Date"></th>
+                            <th><input type="text" class="date text-sm form-control" placeholder="Search Date"></th>
+                            <th></th>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -64,49 +68,52 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="pesan_sistem my-2">
-                <span id="result"></span>
-            </div>
             <div class="modal-body">
-                <span id="result"></span>
                 <form class="form-horizontal" method="post" id="form">
                     <div class="form-body p-3">
-                        <div class="pesan_sistem my-2">
-                            <span id="result"></span>
-                        </div>
-                        {{-- form-judul --}}
+
+                        {{-- Nama Produk --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Nama Produk</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="nama" id="nama"
-                                    placeholder="" required>
+                                <input type="text" class="form-control" name="name_product" id="name_product"
+                                    placeholder="Nama Produk" required>
                             </div>
                         </div>
-            
+
+                        {{-- Jenis Barang --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Jenis Barang</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="kelas" id="kelas"
-                                    placeholder="" required>
+                                <select class="form-control" name="category" required>
+                                    <option value="" selected>Silahkan Dipilih</option>
+                                    <option value="Bahan Baku">Bahan Baku</option>
+                                    <option value="Tools/Peralatan">Tools/Peralatan</option>
+                                </select>
                             </div>
                         </div>
-                        {{-- NIS --}}
+
+                        {{-- Jumlah --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Jumlah</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="nis" id="nis"
-                                    placeholder="" required>
+                                <input type="number" class="form-control" name="jumlah" id="jumlah" min="1" max="1000"
+                                    placeholder="Jumlah" required>
                             </div>
                         </div>
-    
-                        {{-- NISN --}}
+
+                        {{-- Satuan --}}
                         <div class="form-group">
-                            <label class="control-label col-md-5"></label>
+                            <label class="control-label col-md-5">Satuan</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="nisn" id="nisn"
-                                    placeholder="" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Satuan</span>
+                                    <input type="text" class="form-control" name="satuan" id="satuan" 
+                                    placeholder="Kg / Pcs" required>
+                                </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="ok">Save changes</button>

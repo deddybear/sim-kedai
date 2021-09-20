@@ -19,7 +19,6 @@ use App\Http\Controllers\SettingsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/test', [PenjualanController::class, 'columnList']);
 
 Auth::routes();
 Route::get('/', function (){
@@ -57,16 +56,18 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/show/{id}', [PenjualanController::class, 'show'])->name('show-jual');
             Route::put('/update/{id}', [PenjualanController::class, 'update'])->name('update-jual');
             Route::delete('/delete/{id}', [PenjualanController::class, 'delete'])->name('delete-jual');
-            Route::get('/search', [PenjualanController::class, 'search']);
+            Route::get('/search', [PenjualanController::class, 'search'])->name('search-jual');
         });
     
         Route::prefix('pembelian')->group(function () {
             Route::get('/', [PembelianController::class, 'data'])->name('data-beli');
             Route::post('/', [PembelianController::class, 'create'])->name('create-beli');
-            Route::get('/{id}', [PembelianController::class, 'show'])->name('show-beli');
-            Route::put('/{id}', [PembelianController::class, 'update'])->name('update-beli');
-            Route::delete('/{id}', [PembelianController::class, 'delete'])->name('delete-beli');
+            Route::get('/show/{id}', [PembelianController::class, 'show'])->name('show-beli');
+            Route::put('/update/{id}', [PembelianController::class, 'update'])->name('update-beli');
+            Route::delete('/delete/{id}', [PembelianController::class, 'delete'])->name('delete-beli');
+            Route::get('/search', [PembelianController::class, 'search'])->name('search-beli');
         });
+
     });
     
     Route::prefix('stock')->group(function () {
