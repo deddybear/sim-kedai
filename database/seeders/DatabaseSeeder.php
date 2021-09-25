@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Income;
 use App\Models\Expenditure;
+use App\Models\Stock;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,7 +20,8 @@ class DatabaseSeeder extends Seeder
     {
        // User::factory(1)->create();
       //  Transaction::factory(1)->create();
-      Income::factory(1)->create();
+      //Income::factory(1)->create();
       //Expenditure::factory(1)->create();
+      Stock::factory(1)->create();
     }
 }

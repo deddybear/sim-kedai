@@ -38,13 +38,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('penjualan', [PenjualanController::class, 'index']);
             Route::get('pembelian', [PembelianController::class, 'index']);
         });
-    
+
         Route::middleware(['owner'])->group(function () {
-            Route::get('/stock', [StockBahanController::class, 'index']);
             Route::get('/laporan', [LaporanController::class, 'index']);
             Route::get('/activity', [UserActivityController::class, 'index']);
         });
 
+        Route::get('/stock', [StockBahanController::class, 'index']);
         Route::get('/settings', [SettingsController::class, 'index']);
     });
 
@@ -73,9 +73,9 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('stock')->group(function () {
         Route::get('/', [StockBahanController::class, 'data'])->name('data-stock');
         Route::post('/', [StockBahanController::class, 'create'])->name('create-stock');
-        Route::get('/{id}', [StockBahanController::class, 'show'])->name('show-stock');
-        Route::put('/{id}', [StockBahanController::class, 'update'])->name('update-stock');
-        Route::delete('/{id}', [StockBahanController::class, 'delete'])->name('delete-stock');
+        Route::get('/show/{id}', [StockBahanController::class, 'show'])->name('show-stock');
+        Route::put('/update/{id}', [StockBahanController::class, 'update'])->name('update-stock');
+        Route::delete('/delete/{id}', [StockBahanController::class, 'delete'])->name('delete-stock');
     });
     
     Route::prefix('laporan')->group(function () {
@@ -83,8 +83,8 @@ Route::middleware(['auth'])->group(function () {
     });
     
     Route::prefix('activity')->group(function () {
-        Route::get('/', [UserActivityController::class, 'dataActivity'])->name('data-activity');
-        Route::get('/{id}', [UserActivityController::class, 'getActivity'])->name('get-activity');
+        Route::get('/', [UserActivityController::class, 'data'])->name('data-activity');
+        Route::get('/show/{id}', [UserActivityController::class, 'show'])->name('get-activity');
     });
     
     Route::prefix('settings')->group(function () {

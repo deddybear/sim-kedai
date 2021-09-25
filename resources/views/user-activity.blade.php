@@ -9,6 +9,7 @@
 @endsection
 
 @section('script')
+    <script src="{{ asset('/plugins/moment-with-locales.js') }}"></script>  
     <script src="{{ asset('/plugins/sweetalert2/sweetalert2.js') }}"></script>
     <script src="{{ asset('/plugins/dataTables/datatables.js') }}"></script>
     <script src="{{ asset('/pages/activity/script.js') }}"></script>
@@ -30,15 +31,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>1</th>
-                                <th>isi</th>
-                                <th>isi</th>
-                                <th>
-                                    <a href="javascript:;" class="btn btn-xs btn-success show"><i class="fas fa-eye"></i> Lihat Selengkapnya</a>
-                                </th>
-                            </tr>
                         </tbody>
+                        <tfoot>
+                            <th><input type="text" class="date text-sm form-control" placeholder="Search Date"></th>
+                            <th><input type="text" class="text-sm form-control" placeholder="Search Description"></th>
+                            <th><input type="text" class="text-sm form-control" placeholder="Search Name"></th>
+                            <th></th>
+                        </tfoot>
                     </table>
                 </div>
             </div>

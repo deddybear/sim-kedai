@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Expenditure;
+use App\Http\Controllers\UserActivityController as Activity;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
@@ -70,7 +71,7 @@ class PembelianController extends Controller
             Expenditure::create($data);
             return response()->json(['success' => 'Berhasil Menambahkan Data Pembelian']);
         } catch (\Throwable $th) {
-            return response()->json(['erros' => 'Internal Server Error'], 500);
+            return response()->json(['errors' => 'Internal Server Error'], 500);
         }
     }
 
@@ -81,7 +82,7 @@ class PembelianController extends Controller
                                 
            return response()->json($query, 200);
         } catch (\Throwable $th) {
-            return response()->json(['erros' => 'Internal Server Error ' . $th], 500);
+            return response()->json(['errors' => 'Internal Server Error ' . $th], 500);
         }
     }
 
@@ -101,7 +102,7 @@ class PembelianController extends Controller
             Expenditure::where('id', $id)->update($data);
             return response()->json(['success' => 'Berhasil Update Data Pembelian']);
         } catch (\Throwable $th) {
-            return response()->json(['erros' => 'Internal Server Error'], 500);
+            return response()->json(['errors' => 'Internal Server Error'], 500);
         }
     }
 
@@ -110,7 +111,7 @@ class PembelianController extends Controller
             Expenditure::where('id', $id)->delete();
             return response()->json(['success' => 'Berhasil Menghapus Data Penjualan']);
        } catch (\Throwable $th) {
-            return response()->json(['erros' => 'Internal Server Error'], 500);
+            return response()->json(['errors' => 'Internal Server Error'], 500);
        }
     }
 }

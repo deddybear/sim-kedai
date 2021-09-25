@@ -14,8 +14,9 @@ class Activity extends Model
     protected $keyType = 'string';
     protected $guarded = [];
     protected $table = 'tbl_activitys';
+    public $timestamps = false;
 
-    public function users(){
-        return $this->belongsToMany(User::class);
+    public function user(){
+        return $this->hasMany(User::class, 'id', 'id');
     }
 }

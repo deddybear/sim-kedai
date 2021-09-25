@@ -22,6 +22,12 @@ $(document).ready(function () {
        
     }
 
+    const idrFormatter = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+    });
+
     let type = [
         'category',
         'name_product',
@@ -43,7 +49,7 @@ $(document).ready(function () {
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "/transaksi/pembelian",
+        ajax: "/stock",
         columns: [
             {
                 data: "DT_RowIndex",
@@ -52,20 +58,9 @@ $(document).ready(function () {
                 searchable: false,
             },
             { data: "category", name: "category" },
-            { data: "description", name: "description" },
+            { data: "name_product", name: "name_product" },
             { data: "amount", name: "amount" },
-            {
-                data: function (row) {
-                    return idrFormatter.format(row.nominal);
-                },
-                name: "nominal",
-            },
-            {
-                data: function (row) {
-                    return idrFormatter.format(row.total);
-                },
-                name: "total",
-            },
+            { data: "unit", name: "unit" },
             { data: "created_at", name: "created_at" },
             { data: "updated_at", name: "updated_at" },
             {
@@ -111,7 +106,7 @@ $(document).ready(function () {
             scroll: true,
             source: function (request, response) {
                 $.ajax({
-                    url: `/transaksi/pembelian/search`,
+                    url: `/stock/search`,
                     dataType: "JSON",
                     data: {
                         keyword: request.term,
@@ -138,7 +133,7 @@ $(document).ready(function () {
 
     $('#add').click(function() {
         $("#form")[0].reset();
-        domModal('Menambah Data Pembelian', 'Simpan', 'Batalkan')
+        domModal('Menambah Data Stock', 'Simpan', 'Batalkan')
         method = "POST";
 
     })
@@ -147,7 +142,7 @@ $(document).ready(function () {
         method = "PUT";
         $('#form')[0].reset()
         id = $(this).attr('data')
-        domModal('Edit Transaksi Pembelian', 'Simpan Perubahan', 'Batalkan')
+        domModal('Edit Transaksi Stock', 'Simpan Perubahan', 'Batalkan')
         $('#modal_form').modal('show')
     });
 
@@ -155,23 +150,21 @@ $(document).ready(function () {
         id = $(this).attr("data");
         
         $.ajax({
-            url: `/transaksi/pembelian/show/${id}`,
+            url: `/stock/show/${id}`,
             method: "GET",
             dataType: "JSON",
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
-                // console.log(data);
+                 console.log(data);
 
                 Swal.fire({
                     icon: 'info',
                     title: 'Informasi Mengenai Produk',
                     html:`
-                         <b> Deskripsi :</b> ${data.description} <br>
+                         <b> Deskripsi :</b> ${data.name_product} <br>
                          <b> Kategori :</b> ${data.category} <br>
                          <b> Jumlah :</b> ${data.amount} ${data.unit} <br>
-                         <b> Harga Satuan :</b> ${idrFormatter.format(data.nominal)} <br>
-                         <b> Total :</b> ${idrFormatter.format(data.total)} <br>
                          <b> Created By :</b> ${data.created_by[0].name} <br>
                          <b> Updated By :</b> ${data.updated_by[0].name} <br>
                          <b> Created At :</b> ${moment(data.created_at).format('YYYY-DD-MM hh:mm:ss')} <br>
@@ -179,7 +172,19 @@ $(document).ready(function () {
                     showCloseButton: true,
                 });
             },
-            error: function (err) {},
+            error: function (err) {
+                var text = '';
+            
+                for (key in response.responseJSON.errors) {
+                    text += message(response.responseJSON.errors[key]);                    
+                }
+                
+                Swal.fire(
+                    'Whoops ada Kesalahan',
+                    `Error : <br> ${text}`,
+                    'error'
+                )
+            },
         });
     });
 
@@ -189,9 +194,9 @@ $(document).ready(function () {
 
         console.log(`submit ${method}`);
         if (method == "POST") {
-            url = "/transaksi/pembelian";
+            url = "/stock";
         } else if (method == "PUT") {
-            url = `/transaksi/pembelian/update/${id}`;
+            url = `/stock/update/${id}`;
         }
 
         $.ajax({
@@ -209,6 +214,7 @@ $(document).ready(function () {
                 }
             },
             error: function (response) {
+                console.log(response);
                 var text = '';
             
                 for (key in response.responseJSON.errors) {
@@ -239,7 +245,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/transaksi/pembelian/delete/${id}`,
+                    url: `/stock/delete/${id}`,
                     method: 'DELETE',
                     dataType: 'JSON',
                     beforeSend: function () {},
