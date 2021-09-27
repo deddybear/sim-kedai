@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('activity')->group(function () {
         Route::get('/', [UserActivityController::class, 'data'])->name('data-activity');
         Route::get('/show/{id}', [UserActivityController::class, 'show'])->name('get-activity');
+        Route::delete('/delete', [UserActivityController::class, 'delete'])->name('delete-activity');
     });
     
     Route::prefix('settings')->group(function () {

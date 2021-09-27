@@ -74,6 +74,17 @@ class PenjualanController extends Controller
         
         try {
             Income::create($data);
+
+            Activity::create(
+                Auth::id(), 
+                "Menambahkan Data Penjualan
+                 Nama  : $req->name_product  
+                 Jenis : $req->category  
+                 Nominal : $req->harga_satuan
+                 Jumlah : $req->jumlah
+                ", 
+                Carbon::now('Asia/Jakarta')
+            );
             return response()->json(['success' => 'Berhasil Menambahkan Data Penjualan']);
         } catch (\Throwable $th) {
             return response()->json(['erros' => 'Internal Server Error'], 500);
@@ -103,7 +114,18 @@ class PenjualanController extends Controller
         );
 
         try {
-            Income::where('id', $id)->update($data);
+            $income = Income::find($id);
+            Income::find($id)->update($data);
+
+            Activity::create(
+                Auth::id(),
+                "Mengedit Data Penjualan '$income->name_product' => '$req->name_product'  
+                 Jenis '$income->category' => '$req->category' 
+                 Jumlah '$income->amount'  => '$req->jumlah'
+                 Nominal '$income->nominal' => $req->harga_satuan
+                ",
+                Carbon::now('Asia/Jakarta')
+            );
             return response()->json(['success' => 'Berhasil Update Data Penjualan']);
         } catch (\Throwable $th) {
             return response()->json(['erros' => 'Internal Server Error'], 500);
@@ -112,7 +134,20 @@ class PenjualanController extends Controller
 
     public function delete($id){
         try {
-            Income::where('id', $id)->delete();
+            $income = Income::find($id)->first();
+            $income->delete();
+
+            Activity::create(
+                Auth::id(), 
+                "Menghapus Data Penjualan
+                 Nama : $income->name_product 
+                 Jenis : $income->category 
+                 Jumlah : $income->amount 
+                 Nominal : $income->nominal
+                ", 
+                Carbon::now('Asia/Jakarta')
+            );
+
             return response()->json(['success' => 'Berhasil Menghapus Data Penjualan']);
         } catch (\Throwable $th) {
             return response()->json(['erros' => 'Internal Server Error'], 500);

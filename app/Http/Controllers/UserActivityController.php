@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ValidationActivity;
 use App\Models\Activity;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid as Generate;
+use Illuminate\Support\Facades\Auth;
 
 class UserActivityController extends Controller
 {
@@ -32,10 +35,11 @@ class UserActivityController extends Controller
                           ->toJson();
     }
 
-    public static function create($id, $activity, $created_at) {
+    public static function create($user_id, $activity, $created_at) {
 
         $data = array(
-            'id'         => $id,
+            'id'         => Generate::uuid4(),
+            'user_id'    => $user_id,
             'activity'   => $activity,
             'created_at' => $created_at
         );
@@ -48,7 +52,9 @@ class UserActivityController extends Controller
     }
 
     public function show($id){
+
         Activity::with('user:id,name')->find($id);
+
         try {
             $query = Activity::with('user:id,name')->find($id);
 
@@ -56,5 +62,27 @@ class UserActivityController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['errors' => 'Internal Server Error '], 500);
         }
+    }
+
+    public function delete(ValidationActivity $req) {
+        
+        $data = array(
+            $req->day,
+            $req->month,
+            $req->year
+        );
+
+        try {
+
+            if (Activity::whereDate('created_at', "$req->year-$req->month-$req->day")->delete()) {
+                $this->create(Auth::id(), "Menghapus Data Periode $req->day-$req->month-$req->year", Carbon::now('Asia/Jakarta'));
+                return response()->json(['success' => 'Berhasil Menghapuskan Data Periode']);
+            }
+
+            return response()->json(['info' => 'Periode yang dipilih tidak terdapat didatabase']);            
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'Internal Server Error ' . $th], 500);
+        }
+
     }
 }

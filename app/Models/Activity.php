@@ -17,6 +17,6 @@ class Activity extends Model
     public $timestamps = false;
 
     public function user(){
-        return $this->hasMany(User::class, 'id', 'id');
+        return $this->hasMany(User::class, 'id', 'user_id');
     }
 }

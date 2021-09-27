@@ -14,7 +14,8 @@ class TblActivity extends Migration
     public function up()
     {
         Schema::create('tbl_activitys', function (Blueprint $table) {
-            $table->uuid('id')->index();
+            $table->uuid('id')->primary();
+            $table->uuid('user_id')->index();
             $table->text('activity');
             $table->timestamp('created_at');
 

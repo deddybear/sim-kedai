@@ -69,6 +69,17 @@ class PembelianController extends Controller
 
         try {
             Expenditure::create($data);
+
+            Activity::create(
+                Auth::id(),
+                "Menambahkan Data Pembelian
+                 Kategori : $req->category |
+                 Diskripsi : $req->description |
+                 Nominal : $req->harga_satuan |
+                 Jumlah : $req->jumlah $req->satuan |
+                ",
+                Carbon::now('Asia/Jakarta')
+            );
             return response()->json(['success' => 'Berhasil Menambahkan Data Pembelian']);
         } catch (\Throwable $th) {
             return response()->json(['errors' => 'Internal Server Error'], 500);
@@ -99,7 +110,19 @@ class PembelianController extends Controller
         );
 
         try {
-            Expenditure::where('id', $id)->update($data);
+            $exp = Expenditure::find($id);
+
+            Expenditure::find($id)->update($data);
+            Activity::create(
+                Auth::id(),
+                "Mengedit Data Pembelian | 
+                 Kategori : $exp->category => $req->category |
+                 Diskripsi : $exp->description => $req->description |
+                 Nominal : $exp->nominal => $req->harga_satuan |
+                 Jumlah : $exp->amount $exp->unit => $req->jumlah $req->satuan
+                ",
+                Carbon::now('Asia/Jakarta')
+            );
             return response()->json(['success' => 'Berhasil Update Data Pembelian']);
         } catch (\Throwable $th) {
             return response()->json(['errors' => 'Internal Server Error'], 500);
@@ -108,7 +131,20 @@ class PembelianController extends Controller
 
     public function delete($id){
        try {
-            Expenditure::where('id', $id)->delete();
+            $exp = Expenditure::find($id)->first();
+            $exp->delete();
+
+            Activity::create(
+                Auth::id(), 
+                "Menghapus Data Penjualan |
+                 Kategori : $exp->category |
+                 Diskripsi : $exp->description |
+                 Nominal : $exp->nominal |
+                 Jumlah : $exp->amount $exp->unit
+                ", 
+                Carbon::now('Asia/Jakarta')
+            );
+            
             return response()->json(['success' => 'Berhasil Menghapus Data Penjualan']);
        } catch (\Throwable $th) {
             return response()->json(['errors' => 'Internal Server Error'], 500);

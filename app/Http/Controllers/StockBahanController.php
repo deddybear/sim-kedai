@@ -68,10 +68,10 @@ class StockBahanController extends Controller
             
             Activity::create(
                 Auth::id(), 
-                "Menambahkan Data Stock, 
-                 Nama : $req->name_product  
-                 Jenis :  $req->category  
-                 Amount : $req->jumlah'
+                "Menambahkan Data Stock 
+                 Nama  : $req->name_product  
+                 Jenis : $req->category  
+                 Jumlah : $req->jumlah'
                 ", 
                 Carbon::now('Asia/Jakarta')
             );
@@ -104,15 +104,15 @@ class StockBahanController extends Controller
         );
 
         try {
-            $query = Stock::find($id);
-            $query->update($data);
+            $stock = Stock::find($id);
+            Stock::find($id)->update($data);
             
             Activity::create(
                 Auth::id(), 
-                "Mengedit Data Stock '$query->name_product' => '$req->name_product', 
-                 Jenis '$query->category' => '$req->category',
-                 Jumlah '$query->amount'  => '$req->jumlah',
-                 Satuan '$query->unit'    => '$req->satuan'
+                "Mengedit Data Stock '$stock->name_product' => '$req->name_product'  
+                 Jenis '$stock->category' => '$req->category' 
+                 Jumlah '$stock->amount'  => '$req->jumlah' 
+                 Satuan '$stock->unit'    => '$req->satuan'
                 ", 
                 Carbon::now('Asia/Jakarta')
             );
@@ -127,16 +127,16 @@ class StockBahanController extends Controller
     public function delete($id) {
 
         try {
-            $query = Stock::find($id)->first();
-            $query->delete();
+            $stock = Stock::find($id)->first();
+            $stock->delete();
 
             Activity::create(
                 Auth::id(), 
                 "Menghapus Data Stock 
-                 Nama : $query->name_product, 
-                 Jenis : $query->category, 
-                 Jumlah : $query->amount, 
-                 Satuan : $query->unit
+                 Nama : $stock->name_product 
+                 Jenis : $stock->category 
+                 Jumlah : $stock->amount 
+                 Satuan : $stock->unit
                 ", 
                 Carbon::now('Asia/Jakarta')
             );

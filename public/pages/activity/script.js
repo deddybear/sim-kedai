@@ -14,6 +14,36 @@ $(document).ready(function () {
         changeYear: true,
     });
 
+    $('#tanggal').datetimepicker({
+        viewMode: 'days',
+        minViewMode: 'days',
+        format: 'DD'
+    });
+
+    $('#bulan').datetimepicker({
+        viewMode: 'months',
+        minViewMode: 'months',
+        format: 'MM'
+    });
+
+    $('#tahun').datetimepicker({
+        viewMode: 'years',
+        format: 'YYYY'
+    });
+
+    let message = messageErrors => {
+        var temp = '';
+        if (messageErrors instanceof Array) {
+                messageErrors.forEach(element => {
+                    temp += `${element} <br>`
+                });
+                return temp;
+        } else {
+            return messageErrors ? `${messageErrors} <br>` : ' '
+        }
+       
+    }
+
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
@@ -85,5 +115,42 @@ $(document).ready(function () {
             },
         })
 
+    })
+
+    $('#form').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: '/activity/delete',
+            method: 'DELETE',
+            dataType: 'JSON',
+            data: $('#form').serialize(),
+            beforeSend: function () {},
+            complete: function () {},
+            success: function (data) {
+                if (data.success) {
+                    Swal.fire("Sukses!", data.success, "success");
+                    location.reload();
+                } else {
+                    Swal.fire("Peringatan!", data.info, "warning");
+                }
+                
+            },
+            error: function (response) {
+                console.log(response);
+
+                var text = '';
+            
+                for (key in response.responseJSON.errors) {
+                    text += message(response.responseJSON.errors[key]);                    
+                }
+                
+                Swal.fire(
+                    'Whoops ada Kesalahan',
+                    `Error : <br> ${text}`,
+                    'error'
+                )
+            }
+        })
     })
 })
