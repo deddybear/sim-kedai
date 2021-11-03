@@ -102,6 +102,14 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                                @if (Auth::user()->roles == 1)
+                                <li class="nav-item">
+                                    <a href="/dashboard/pegawai" class="nav-link">
+                                        <i class="fas fa-user-edit nav-icon"></i>
+                                        <p>Akun Pegawai</p>
+                                    </a>
+                                </li>
+                                @endif
                                 <li class="nav-item">
                                     <a href="/dashboard/settings" class="nav-link">
                                         <i class="fas fa-user-edit nav-icon"></i>

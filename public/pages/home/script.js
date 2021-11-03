@@ -1,14 +1,24 @@
 $(document).ready(function () {
-    const COLORS = [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
+    const type = ['date', 'month', 'year'];
+
+    const value = [
+        moment().format('YYYY-MM-DD'),
+        moment().format('MM'),
+        moment().format('YYYY')
     ];
-    
+
+    const tagsInc = [
+        $('#inc_today'),
+        $('#inc_month'),
+        $('#inc_year'),
+    ];
+
+    const tagsSpe = [
+        $('#spe_today'),
+        $('#spe_month'),
+        $('#spe_year'),
+    ]
+        
     const MONTHS = [
         'January',
         'February',
@@ -23,6 +33,79 @@ $(document).ready(function () {
         'November',
         'December'
     ];
+
+    for (let i = 0; i < 3; i++) {
+        $.ajax({
+            url: `/income/${type[i]}/${value[i]}`,
+            method: 'GET',
+            dataType: 'JSON',
+            beforeSend: function() {},
+            success: function(data) {
+                tagsInc[i].html(data.value);
+            },
+            error: function() {}
+        });
+    }
+
+    for (let i = 0; i < 3; i++) {
+        $.ajax({
+            url: `/spending/${type[i]}/${value[i]}`,
+            method: 'GET',
+            dataType: 'JSON',
+            beforeSend: function() {},
+            success: function(data) {
+                tagsSpe[i].html(data.value);
+            },
+            error: function() {}
+        });
+    }
+
+    $.ajax({
+        url: `/history/${moment().format('YYYY')}`,
+        method: 'GET',
+        dataType: 'JSON',
+        beforeSend: function() {},
+        success: function(data) {
+            console.log(data);
+            const chartInOut = new Chart($('#grafik'), {
+                type: 'bar',
+                data: {
+                    labels: MONTHS,
+                    datasets: [
+                        {
+                            label: 'Pemasukan',
+                            data: data[0],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                        },
+                        {
+                            label: 'Pengeluaran',
+                            data: data[1],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                        }       
+                    ]
+                },
+                options: {
+                    responsive: 'true',
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Grafik Data Pemasukan & Pengeluaran Per Bulan'
+                        }
+                    }
+                }
+            });
+
+           
+        },
+        error: function() {}
+    })
     
     var _seed = Date.now();
     
@@ -61,58 +144,10 @@ $(document).ready(function () {
             data.push(null);
           }
         }
-      
+
         return data;
     }
     
-    function months(config) {
-    
-        var cfg = config || {};
-        var count = cfg.count || 12;
-        var section = cfg.section;
-        var values = [];
-        var i, value;
-      
-        for (i = 0; i < count; ++i) {
-          value = MONTHS[Math.ceil(i) % 12];
-          values.push(value.substring(0, section));
-        }
-      
-        return values;
-    }
-    
-    const chartInOut = new Chart($('#grafik'), {
-        type: 'bar',
-        data: {
-            labels: months({count: 12}),
-            datasets: [
-                {
-                    label: 'Pengeluaran',
-                    data: numbers({count: 12, min: 1000, max: 100000}),
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                },
-                {
-                    label: 'Pemasukan',
-                    data: numbers({count: 12, min: 1000, max: 100000}),
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                }       
-            ]
-        },
-        options: {
-            responsive: 'true',
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Grafik Data Pemasukan & Pengeluaran Per Bulan'
-                }
-            }
-        }
-    });
+
+
 })

@@ -65,12 +65,6 @@ class UserActivityController extends Controller
     }
 
     public function delete(ValidationActivity $req) {
-        
-        $data = array(
-            $req->day,
-            $req->month,
-            $req->year
-        );
 
         try {
 
