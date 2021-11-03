@@ -170,7 +170,7 @@ $(document).ready(function () {
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
-                // console.log(data);
+               
 
                 Swal.fire({
                     icon: 'info',
@@ -210,7 +210,7 @@ $(document).ready(function () {
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
-                console.log(data);
+             
                 if (data.success) {
                     Swal.fire("Sukses!", data.success, "success");
                     location.reload();

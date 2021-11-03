@@ -1,7 +1,13 @@
 @extends('layouts.app')
-
+@section('css')
+    <style>
+        body {
+            background-color: #EEEEEE;
+        }
+    </style>
+@endsection
 @section('content')
-<div class="container">
+<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -20,6 +26,17 @@
                         @csrf
                         <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
                     </form>
+
+                    <div class="col-12 col-lg-2 mx-auto">
+                        <a href="{{ route('logout') }}" class="btn btn-success" 
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    class="d-none">
+                                    @csrf
+                                </form>
+                                <font>Logout</font>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

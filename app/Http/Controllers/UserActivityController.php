@@ -18,15 +18,13 @@ class UserActivityController extends Controller
     }
 
     public function data() {
-        $query = Activity::with('user:id,name')->orderBy('created_at', 'asc');
 
+        $query = Activity::orderBy('created_at', 'asc');
+        // dd($query);
         return DataTables::eloquent($query)
                           ->editColumn('created_at', function ($query) {
                               return Carbon::createFromFormat('Y-m-d H:i:s', $query->created_at, 'Asia/Jakarta')
                                              ->format('Y-m-d');
-                          })
-                          ->editColumn('user_id', function ($query) {
-                              return $query->user[0]->name;
                           })
                           ->addColumn('Actions', function ($query) {
                             return '<a href="javascript:;" class="btn btn-xs btn-info detail" data="'.$query->id.'"><i class="fas fa-eye"></i> Lihat Selengkapnya</a>';

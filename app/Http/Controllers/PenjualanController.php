@@ -76,7 +76,7 @@ class PenjualanController extends Controller
             Income::create($data);
 
             Activity::create(
-                Auth::id(), 
+                Auth::user()->name, 
                 "Menambahkan Data Penjualan
                  Nama  : $req->name_product  
                  Jenis : $req->category  
@@ -95,7 +95,7 @@ class PenjualanController extends Controller
     public function show($id) {
         try {
             $query = Income::with('createdBy:id,name', 'updatedBy:id,name')
-                            ->find($id);
+                            ->where('id', $id)->first();
             return response()->json($query, 200);
         } catch (\Throwable $th) {
             return response()->json(['erros' => 'Internal Server Error'], 500);
@@ -114,11 +114,11 @@ class PenjualanController extends Controller
         );
 
         try {
-            $income = Income::find($id);
-            Income::find($id)->update($data);
+            $income = Income::where('id', $id)->first();
+            Income::where('id', $id)->update($data);
 
             Activity::create(
-                Auth::id(),
+                Auth::user()->name,
                 "Mengedit Data Penjualan '$income->name_product' => '$req->name_product'  
                  Jenis '$income->category' => '$req->category' 
                  Jumlah '$income->amount'  => '$req->jumlah'
@@ -128,17 +128,17 @@ class PenjualanController extends Controller
             );
             return response()->json(['success' => 'Berhasil Update Data Penjualan']);
         } catch (\Throwable $th) {
-            return response()->json(['erros' => 'Internal Server Error'], 500);
+            return response()->json(['erros' => "Internal Server Error $th"], 500);
         }
     }
 
     public function delete($id){
         try {
-            $income = Income::find($id)->first();
+            $income = Income::where('id', $id)->first();
             $income->delete();
 
             Activity::create(
-                Auth::id(), 
+                Auth::user()->name, 
                 "Menghapus Data Penjualan
                  Nama : $income->name_product 
                  Jenis : $income->category 

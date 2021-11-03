@@ -22,17 +22,18 @@ use App\Http\Controllers\PegawaiController;
 */
 
 Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/', function (){
     return redirect('/dashboard');
 });
 
 Route::get('/test', function () {
-    return view('pdf.laporan');
+    return view('mail.index');
 });
 
 // Route untuk mengarah ke halaman dari controller
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
     
@@ -72,6 +73,13 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', [LaporanController::class, 'downloadReport'])->name('download-report');
         });
 
+        Route::prefix('pegawai')->group(function () {
+            Route::get('/', [PegawaiController::class, 'data'])->name('data-pegawai');
+            Route::post('/', [PegawaiController::class, 'create']);
+            Route::get('/search', [PegawaiController::class, 'search'])->name('data-pegawai');
+            Route::delete('/delete/{id}', [PegawaiController::class, 'delete']);
+            Route::get('/mail', [PegawaiController::class, 'mail']);
+        });
     });
 
     Route::prefix('transaksi')->group(function () {
@@ -101,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/show/{id}', [StockBahanController::class, 'show'])->name('show-stock');
         Route::put('/update/{id}', [StockBahanController::class, 'update'])->name('update-stock');
         Route::delete('/delete/{id}', [StockBahanController::class, 'delete'])->name('delete-stock');
+        Route::get('/search', [StockBahanController::class, 'search'])->name('search-stock');
     }); 
     
     Route::prefix('settings')->group(function () {
@@ -108,6 +117,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/password/{id}', [SettingsController::class, 'changePassword'])->name('change-password');
         Route::put('/email/{id}', [SettingsController::class, 'changeEmail'])->name('change-email');
     });
+
+
 });
 
 

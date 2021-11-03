@@ -99,7 +99,7 @@ $(document).ready(function () {
 
     $(document).on("focus", ".autocomplete_f", function () {
         let type = $(this).data("type");
-        console.log(type);
+
         $(this).autocomplete({
             minLength: 3,
             max: 10,
@@ -192,7 +192,7 @@ $(document).ready(function () {
         e.preventDefault();
         var url;
 
-        console.log(`submit ${method}`);
+        
         if (method == "POST") {
             url = "/stock";
         } else if (method == "PUT") {
@@ -207,7 +207,7 @@ $(document).ready(function () {
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
-                console.log(data);
+                
                 if (data.success) {
                     Swal.fire("Sukses!", data.success, "success");
                     location.reload();

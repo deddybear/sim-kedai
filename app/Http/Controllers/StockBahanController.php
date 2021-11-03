@@ -67,7 +67,7 @@ class StockBahanController extends Controller
             Stock::create($data);
             
             Activity::create(
-                Auth::id(), 
+                Auth::user()->name, 
                 "Menambahkan Data Stock 
                  Nama  : $req->name_product  
                  Jenis : $req->category  
@@ -85,7 +85,7 @@ class StockBahanController extends Controller
     public function show($id) {
         try {
             $query = Stock::with('createdBy:id,name', 'updatedBy:id,name')
-                                 ->find($id);
+                                 ->where('id', $id)->first();
                                  
             return response()->json($query, 200);
          } catch (\Throwable $th) {
@@ -104,11 +104,11 @@ class StockBahanController extends Controller
         );
 
         try {
-            $stock = Stock::find($id);
-            Stock::find($id)->update($data);
+            $stock = Stock::where('id', $id)->first();
+            Stock::where('id', $id)->update($data);
             
             Activity::create(
-                Auth::id(), 
+                Auth::user()->name, 
                 "Mengedit Data Stock '$stock->name_product' => '$req->name_product'  
                  Jenis '$stock->category' => '$req->category' 
                  Jumlah '$stock->amount'  => '$req->jumlah' 
@@ -127,11 +127,11 @@ class StockBahanController extends Controller
     public function delete($id) {
 
         try {
-            $stock = Stock::find($id)->first();
+            $stock = Stock::where('id', $id)->first();
             $stock->delete();
 
             Activity::create(
-                Auth::id(), 
+                Auth::user()->name, 
                 "Menghapus Data Stock 
                  Nama : $stock->name_product 
                  Jenis : $stock->category 

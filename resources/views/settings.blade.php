@@ -83,7 +83,7 @@ $dataAkun = Auth::user();
                                             </div>
                                         </div>
                                         <p class="alert alert-secondary" role="alert">
-                                            bla bla bla
+                                            Notice : isikan dengan nama lengkap anda !
                                         </p>
                                         <div class="dropdown-divider"></div>
                                         <div class="row">
@@ -156,13 +156,13 @@ $dataAkun = Auth::user();
                                             </div>
                                         </div>
                                         <p class="alert alert-secondary" role="alert">
-                                            bla bla bla
+                                            Notice : Selalu Jaga Kerahasiaan password anda !
                                         </p>
                                         <div class="dropdown-divider"></div>
                                         <div class="row">
                                             <button type="button" id="cancelPanelPassword"
                                                 class="btn btn-sm btn-primary mr-1">Tutup</button>
-                                            <button class="btn btn-xs btn-success ml-1" type="submit">Ubah Nama</button>
+                                            <button class="btn btn-xs btn-success ml-1" type="submit">Ubah Password</button>
                                         </div>
                                     </form>
                                 </div>
@@ -203,13 +203,13 @@ $dataAkun = Auth::user();
                                             </div>
                                         </div>
                                         <p class="alert alert-secondary" role="alert">
-                                            bla bla bla
+                                            Notice : Email tidak boleh sama !
                                         </p>
                                         <div class="dropdown-divider"></div>
                                         <div class="row">
                                             <button type="button" id="cancelPanelEmail"
                                                 class="btn btn-sm btn-primary mr-1">Tutup</button>
-                                            <button class="btn btn-xs btn-success ml-1" type="submit">Ubah Nama</button>
+                                            <button class="btn btn-xs btn-success ml-1" type="submit">Ubah Email</button>
                                         </div>
                                     </form>
                                 </div>

@@ -71,7 +71,7 @@ class PembelianController extends Controller
             Expenditure::create($data);
 
             Activity::create(
-                Auth::id(),
+                Auth::user()->name,
                 "Menambahkan Data Pembelian
                  Kategori : $req->category |
                  Diskripsi : $req->description |
@@ -87,9 +87,10 @@ class PembelianController extends Controller
     }
 
     public function show($id) {
+
         try {
            $query = Expenditure::with('createdBy:id,name', 'updatedBy:id,name')
-                                ->find($id);
+                                ->where('id', $id)->first();
                                 
            return response()->json($query, 200);
         } catch (\Throwable $th) {
@@ -110,11 +111,11 @@ class PembelianController extends Controller
         );
 
         try {
-            $exp = Expenditure::find($id);
+            $exp = Expenditure::where('id', $id)->first();
 
-            Expenditure::find($id)->update($data);
+            Expenditure::where('id', $id)->update($data);
             Activity::create(
-                Auth::id(),
+                Auth::user()->name,
                 "Mengedit Data Pembelian | 
                  Kategori : $exp->category => $req->category |
                  Diskripsi : $exp->description => $req->description |
@@ -131,11 +132,11 @@ class PembelianController extends Controller
 
     public function delete($id){
        try {
-            $exp = Expenditure::find($id)->first();
+            $exp = Expenditure::where('id', $id)->first();
             $exp->delete();
 
             Activity::create(
-                Auth::id(), 
+                Auth::user()->name, 
                 "Menghapus Data Penjualan |
                  Kategori : $exp->category |
                  Diskripsi : $exp->description |

@@ -13,7 +13,7 @@ $(document).ready(function() {
     }
     
     $('#panelNama').click(function () {
-        let name = "<span class='txt-prepend strong'>bla bla bla : </span>";
+        let name = "<span class='txt-prepend strong'>Nama : </span>";
         
         if (!open.panelNama) {
             $('#setting-nama').show('slow', function () {
@@ -58,7 +58,7 @@ $(document).ready(function() {
     })
 
     $('#panelEmail').click(function () {
-        let name = "<span class='txt-prepend strong'>bla bla bla : </span>";
+        let name = "<span class='txt-prepend strong'>Email : </span>";
 
         if (!open.panelEmail) {
             $('#setting-email').show('slow', function() {

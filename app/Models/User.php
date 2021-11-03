@@ -12,7 +12,7 @@ use App\Models\Activity;
 use App\Models\Stock;
 use App\Models\Income;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 

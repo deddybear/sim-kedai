@@ -3,11 +3,12 @@ $(document).ready(function () {
     let method;
     let id;
 
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
         }
-    });
+    })
 
     let message = messageErrors => {
         var temp = '';
@@ -22,16 +23,9 @@ $(document).ready(function () {
        
     }
 
-    const idrFormatter = new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-    });
-
     let type = [
-        'category',
-        'description',
-        'amount'
+        'name',
+        'email',
     ]
 
     function domModal(textTitle, textConfrim, textClose) {
@@ -49,7 +43,7 @@ $(document).ready(function () {
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "/transaksi/pembelian",
+        ajax: "/pegawai",
         columns: [
             {
                 data: "DT_RowIndex",
@@ -57,21 +51,9 @@ $(document).ready(function () {
                 orderable: false,
                 searchable: false,
             },
-            { data: "category", name: "category" },
-            { data: "description", name: "description" },
-            { data: "amount", name: "amount" },
-            {
-                data: function (row) {
-                    return idrFormatter.format(row.nominal);
-                },
-                name: "nominal",
-            },
-            {
-                data: function (row) {
-                    return idrFormatter.format(row.total);
-                },
-                name: "total",
-            },
+            { data: "name", name: "name" },
+            { data: "email", name: "email" },
+            { data: "email_verified_at", name: "email_verified_at" },
             { data: "created_at", name: "created_at" },
             { data: "updated_at", name: "updated_at" },
             {
@@ -110,21 +92,21 @@ $(document).ready(function () {
 
     $(document).on("focus", ".autocomplete_f", function () {
         let type = $(this).data("type");
-        console.log(type);
+
         $(this).autocomplete({
             minLength: 3,
             max: 10,
             scroll: true,
             source: function (request, response) {
                 $.ajax({
-                    url: `/transaksi/pembelian/search`,
+                    url: `/pegawai/search`,
                     dataType: "JSON",
                     data: {
                         keyword: request.term,
                         type: type,
                     },
                     success: function (data) {
-                       
+                        console.log(data);
                         let array = [];
                         let index = 0;
 
@@ -142,83 +124,30 @@ $(document).ready(function () {
         });
     });
 
-    $('#add').click(function() {
-        $("#form")[0].reset();
-        domModal('Menambah Data Pembelian', 'Simpan', 'Batalkan')
-        method = "POST";
-
-    })
-
-    $('tbody').on('click', '.edit', function() {
-        method = "PUT";
-        $('#form')[0].reset()
-        id = $(this).attr('data')
-        domModal('Edit Transaksi Pembelian', 'Simpan Perubahan', 'Batalkan')
-        $('#modal_form').modal('show')
-    });
-
-    $("tbody").on("click", ".detail", function () {
-        id = $(this).attr("data");
-        
-        $.ajax({
-            url: `/transaksi/pembelian/show/${id}`,
-            method: "GET",
-            dataType: "JSON",
-            beforeSend: function () {},
-            complete: function () {},
-            success: function (data) {
-            
-
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Informasi Mengenai Produk',
-                    html:`
-                         <b> Deskripsi :</b> ${data.description} <br>
-                         <b> Kategori :</b> ${data.category} <br>
-                         <b> Jumlah :</b> ${data.amount} ${data.unit} <br>
-                         <b> Harga Satuan :</b> ${idrFormatter.format(data.nominal)} <br>
-                         <b> Total :</b> ${idrFormatter.format(data.total)} <br>
-                         <b> Created By :</b> ${data.created_by[0].name} <br>
-                         <b> Updated By :</b> ${data.updated_by[0].name} <br>
-                         <b> Created At :</b> ${moment(data.created_at).format('YYYY-DD-MM hh:mm:ss')} <br>
-                         <b> Updated At :</b> ${moment(data.updated_at).format('YYYY-DD-MM hh:mm:ss')}`,
-                    showCloseButton: true,
-                });
-            },
-            error: function (err) {},
-        });
-    });
-
     $("#form").on("submit", function (e) {
         e.preventDefault();
-        var url;
-
-        console.log(`submit ${method}`);
-        if (method == "POST") {
-            url = "/transaksi/pembelian";
-        } else if (method == "PUT") {
-            url = `/transaksi/pembelian/update/${id}`;
-        }
 
         $.ajax({
-            url: url,
-            method: method,
+            url: '/pegawai',
+            method: 'POST',
             dataType: "JSON",
             data: $("#form").serialize(),
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
-         
+                
                 if (data.success) {
                     Swal.fire("Sukses!", data.success, "success");
                     location.reload();
                 }
             },
             error: function (response) {
+                console.log(response);
                 var text = '';
             
                 for (key in response.responseJSON.errors) {
-                    text += message(response.responseJSON.errors[key]);                    
+                    response.responseJSON.errors[key]
+                    // text += message(response.responseJSON.errors[key]);                    
                 }
                 
                 Swal.fire(
@@ -227,12 +156,12 @@ $(document).ready(function () {
                     'error'
                 )
             },
-        });
-    });
+        })
+    })
 
     $('tbody').on('click', '.delete', function() { 
         let id = $(this).attr('data')
-
+ 
         Swal.fire({
             title: "Apakah kamu yakin ??",
             text: "Setelah terhapus, ini tidak bisa dikembalikan lagi!",
@@ -245,12 +174,13 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/transaksi/pembelian/delete/${id}`,
+                    url: `/pegawai/delete/${id}`,
                     method: 'DELETE',
                     dataType: 'JSON',
                     beforeSend: function () {},
                     complete: function () {},
                     success: function (data) {
+                        
                         Swal.fire("Deleted!", data.success, "success");
                         location.reload();
                     },

@@ -15,6 +15,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('/plugins/adminlte/adminlte.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/fontawesome/all.css') }}">
+    @yield('css')
 </head>
 <body >
     <div id="app">
