@@ -9,4 +9,6 @@ $(document).ready(function() {
         viewMode: 'years',
         format: 'YYYY'
     });
+
+    $('#loader-wrapper').hide();
 })

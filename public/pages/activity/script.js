@@ -74,6 +74,8 @@ $(document).ready(function () {
                         }
                     );
                 });
+
+            $('#loader-wrapper').hide();
         },
     })
 
@@ -84,10 +86,14 @@ $(document).ready(function () {
             url: `/activity/show/${id}`,
             method: "GET",
             dataType: "JSON",
-            beforeSend: function () {},
-            complete: function () {},
+            beforeSend : function () {
+                $('#loader-wrapper').show();
+            },
+            complete: function() {
+                $('#loader-wrapper').hide();
+            },
             success: function (data) {
-               // console.log(data);
+ 
 
                 Swal.fire({
                     icon: 'info',
@@ -125,8 +131,12 @@ $(document).ready(function () {
             method: 'DELETE',
             dataType: 'JSON',
             data: $('#form').serialize(),
-            beforeSend: function () {},
-            complete: function () {},
+            beforeSend : function () {
+                $('#loader-wrapper').show();
+            },
+            complete: function() {
+                $('#loader-wrapper').hide();
+            },
             success: function (data) {
                 if (data.success) {
                     Swal.fire("Sukses!", data.success, "success");

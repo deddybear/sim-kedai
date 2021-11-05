@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use App\Http\Requests\ValidationActivity;
 use App\Models\Activity;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,7 +18,6 @@ class UserActivityController extends Controller
     public function data() {
 
         $query = Activity::orderBy('created_at', 'asc');
-        // dd($query);
         return DataTables::eloquent($query)
                           ->editColumn('created_at', function ($query) {
                               return Carbon::createFromFormat('Y-m-d H:i:s', $query->created_at, 'Asia/Jakarta')
@@ -67,7 +64,7 @@ class UserActivityController extends Controller
         try {
 
             if (Activity::whereDate('created_at', "$req->year-$req->month-$req->day")->delete()) {
-                $this->create(Auth::id(), "Menghapus Data Periode $req->day-$req->month-$req->year", Carbon::now('Asia/Jakarta'));
+                $this->create(Auth::user()->name, "Menghapus Data Periode $req->day-$req->month-$req->year", Carbon::now('Asia/Jakarta'));
                 return response()->json(['success' => 'Berhasil Menghapuskan Data Periode']);
             }
 

@@ -1,5 +1,16 @@
 @extends('layouts.master')
 
+@section('title', 'Reset Password')
+@section('title-header', 'Reset Password')
+
+@section('script')
+    <script>
+        $(document).ready(function (){
+            $('#loader-wrapper').hide();
+        })
+    </script>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

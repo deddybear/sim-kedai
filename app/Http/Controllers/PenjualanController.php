@@ -18,7 +18,7 @@ class PenjualanController extends Controller
     }
 
     public function data() {
-        //$query = Income::with('createdBy:id,name', 'updatedBy:id,name')->orderBy('created_at', 'asc');
+
         $query = Income::orderBy('created_at', 'asc');
 
         return DataTables::eloquent($query)
@@ -31,12 +31,6 @@ class PenjualanController extends Controller
                                 return Carbon::createFromFormat('Y-m-d H:i:s', $query->updated_at, 'Asia/Jakarta')
                                                 ->format('Y-m-d');
                           })
-                        //   ->addColumn('created_by', function ($query) {
-                        //      return $query->createdBy[0]->name;
-                        //   })
-                        //   ->addColumn('updated_by', function ($query) {
-                        //      return $query->updatedBy[0]->name;
-                        //   })
                           ->addColumn('Actions', function($query) {
                               return '<a href="javascript:;" class="btn btn-xs btn-info detail" data="'.$query->id.'">Detail</a>
                               <a href="javascript:;" class="btn btn-xs btn-warning edit" data="'.$query->id.'">Edit</a>

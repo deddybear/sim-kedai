@@ -19,10 +19,16 @@
     <link rel="stylesheet" href="{{ asset('/plugins/adminlte/adminlte.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/fontawesome/all.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/sweetalert2/sweetalert2.css') }}">
+    <link rel="stylesheet" href="{{ asset('/plugins/loader.min.css') }}">
     
     @yield('css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+    <div id="loader-wrapper">
+	    <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div> 
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <ul class="navbar-nav">
@@ -39,7 +45,7 @@
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="/" class="brand-link">
-                <span class="brand-text font-weight-light">Lorem Ipsum</span>
+                <span class="brand-text font-weight-light">SIM - Kedai </span>
             </a>
             <div class="sidebar">
                 <nav class="mt-2">

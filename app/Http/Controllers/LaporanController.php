@@ -38,17 +38,8 @@ class LaporanController extends Controller
             'total_exp'     => $totalExp
         );
 
-        //return view('pdf.laporan', $data);
-
-        //$pdf = New PDF();
         $pdf = PDF::loadView('pdf.laporan', $data)->setPaper('A4', 'potrait');
         return $pdf->stream();
-
-        // dump("Pengeluaran : " . $totalExp);
-        // dump("Pemasukan : " . $totalIncome);
-
-        // dump($expenditure);
-        // dd($income);
 
     }
 }

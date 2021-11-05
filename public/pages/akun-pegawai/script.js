@@ -78,6 +78,8 @@ $(document).ready(function () {
                         }
                     );
                 });
+            
+            $('#loader-wrapper').hide();
         },
     })
 
@@ -104,6 +106,12 @@ $(document).ready(function () {
                     data: {
                         keyword: request.term,
                         type: type,
+                    },
+                    beforeSend: function () {
+                        $("#loader-wrapper").show();
+                    },
+                    complete: function () {
+                        $("#loader-wrapper").hide();
                     },
                     success: function (data) {
                         console.log(data);
@@ -132,8 +140,12 @@ $(document).ready(function () {
             method: 'POST',
             dataType: "JSON",
             data: $("#form").serialize(),
-            beforeSend: function () {},
-            complete: function () {},
+            beforeSend: function () {
+                $("#loader-wrapper").show();
+            },
+            complete: function () {
+                $("#loader-wrapper").hide();
+            },
             success: function (data) {
                 
                 if (data.success) {
@@ -177,8 +189,12 @@ $(document).ready(function () {
                     url: `/pegawai/delete/${id}`,
                     method: 'DELETE',
                     dataType: 'JSON',
-                    beforeSend: function () {},
-                    complete: function () {},
+                    beforeSend: function () {
+                        $("#loader-wrapper").show();
+                    },
+                    complete: function () {
+                        $("#loader-wrapper").hide();
+                    },
                     success: function (data) {
                         
                         Swal.fire("Deleted!", data.success, "success");
