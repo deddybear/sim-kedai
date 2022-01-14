@@ -25,7 +25,7 @@ class PegawaiController extends Controller
     public function data() {
         
         $query = User::select('id', 'email', 'name', 'email_verified_at', 'created_at', 'updated_at')
-                    ->where('roles', '0')
+                    ->where('roles', '!=', '0')
                     ->orderBy('created_at', 'asc');
 
         return DataTables::eloquent($query)
@@ -76,7 +76,7 @@ class PegawaiController extends Controller
             'email'          => $req->email,
             'password'       => Hash::make($password),
             'remember_token' => Str::random(10),
-            'roles'          => 0,
+            'roles'          => $req->role,
         );
 
         try {
@@ -106,7 +106,7 @@ class PegawaiController extends Controller
 
             $user = User::where([
                 ['id', $id],
-                ['roles', '0']
+                ['roles', '!=', '0']
             ])->first(); 
 
             $user->delete();

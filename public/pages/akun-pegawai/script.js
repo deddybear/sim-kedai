@@ -154,12 +154,12 @@ $(document).ready(function () {
                 }
             },
             error: function (response) {
-                console.log(response);
+                console.log(response.responseJSON.errors);
                 var text = '';
             
                 for (key in response.responseJSON.errors) {
                     response.responseJSON.errors[key]
-                    // text += message(response.responseJSON.errors[key]);                    
+                    text += message(response.responseJSON.errors[key]);                    
                 }
                 
                 Swal.fire(
@@ -187,7 +187,7 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 $.ajax({
                     url: `/pegawai/delete/${id}`,
-                    method: 'DELETE',
+                    method: 'delete',
                     dataType: 'JSON',
                     beforeSend: function () {
                         $("#loader-wrapper").show();

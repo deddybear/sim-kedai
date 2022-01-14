@@ -56,6 +56,7 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        @if (Auth::user()->roles != 2)
                         <li class="nav-item has-tree">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-chart-line"></i>
@@ -79,26 +80,31 @@
                                 </li>
                             </ul>
                         </li>
+                        @endif                        
+                        @if (Auth::user()->roles != 1)
                         <li class="nav-item">
                             <a href="/dashboard/stock" class="nav-link">
                                 <i class="nav-icon fas fa-box-open"></i>
                                 <p>Stok Bahan Baku</p>
                             </a>
                         </li>
-                        @if (Auth::user()->roles == 1)
+                        @endif
+                        @if (Auth::user()->roles != 2)
                         <li class="nav-item">
                             <a href="/dashboard/laporan" class="nav-link">
                                 <i class="fas fa-clipboard-list nav-icon"></i>
                                 <p>Laporan</p>
                             </a>
                         </li>
+                        @endif
+                        @if (Auth::user()->roles == 0)
                         <li class="nav-item">
                             <a href="/dashboard/activity" class="nav-link">
                                 <i class="nav-icon fas fa-chalkboard-teacher"></i>
                                 <p>User Activity</p>
                             </a>
                         </li>
-                        @endif
+                        @endif                       
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-user-cog"></i>
@@ -108,7 +114,7 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                @if (Auth::user()->roles == 1)
+                                @if (Auth::user()->roles == 0)
                                 <li class="nav-item">
                                     <a href="/dashboard/pegawai" class="nav-link">
                                         <i class="fas fa-user-edit nav-icon"></i>

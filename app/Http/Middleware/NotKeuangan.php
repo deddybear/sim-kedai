@@ -4,9 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
-class Pegawai
+class NotKeuangan
 {
     /**
      * Handle an incoming request.
@@ -17,10 +17,12 @@ class Pegawai
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->roles != '0') {
+        if (Auth::user()->roles == '1') {
             return abort(403, 'Anda Tidak Mempunyai HAK Akses disini');
         }
 
         return $next($request);
+
+
     }
 }

@@ -25,7 +25,8 @@ class ValidationPegawai extends FormRequest
     {
         return [
             'name_account'  => 'required|between:5,50|string',
-            'email'         => 'required|email:rfc,dns|unique:tbl_users,email'
+            'email'         => 'required|email:rfc,dns|unique:tbl_users,email',
+            'role'          => 'required|numeric|min:1|max:2'
         ];
     }
 
@@ -37,7 +38,11 @@ class ValidationPegawai extends FormRequest
             'name_account.string'   => 'Mohon di isi Nama Pegawai dengan benar',
             'email.required'        => 'Email harus wajib di-isi',
             'email.email'           => 'Format Email salah',
-            'email.unique'          => 'Email ini sudah terdaftar'
+            'email.unique'          => 'Email ini sudah terdaftar',
+            'role.required'         => 'Mohon dipilih untuk jabatannya',
+            'role.numeric'          => 'Jabatan yang dipilih salah num',
+            'role.max'              => 'Jabatan yang dipilih salah max',
+            'role.min'              => 'Jabatan yang dipilih salah min'
         ];
     }
 

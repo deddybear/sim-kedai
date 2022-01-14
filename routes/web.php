@@ -37,22 +37,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
     
-        Route::prefix('transaksi')->group(function () {
-            Route::get('/', function() {
-                return redirect('/dashboard');
-            });
-    
-            Route::get('penjualan', [PenjualanController::class, 'index'])->name('page-penjualan');
-            Route::get('pembelian', [PembelianController::class, 'index'])->name('page-pembelian');
-        });
-
-        Route::middleware(['owner'])->group(function () {
-            Route::get('/laporan', [LaporanController::class, 'index']);
+        Route::middleware(['owner'])->group(function () {            
             Route::get('/activity', [UserActivityController::class, 'index']);
             Route::get('/pegawai', [PegawaiController::class, 'index']);
         });
 
-        Route::get('/stock', [StockBahanController::class, 'index']);
+        Route::middleware(['notheadbar'])->group(function () {
+            Route::get('/laporan', [LaporanController::class, 'index']);
+            
+            Route::prefix('transaksi')->group(function () {
+                Route::get('/', function() {
+                    return redirect('/dashboard');
+                });
+        
+                Route::get('penjualan', [PenjualanController::class, 'index'])->name('page-penjualan');
+                Route::get('pembelian', [PembelianController::class, 'index'])->name('page-pembelian');
+            });
+        });
+
+        
+        Route::middleware(['notkeuangan'])->group(function () {
+            Route::get('/stock', [StockBahanController::class, 'index']);
+        });
+
+        
         Route::get('/settings', [SettingsController::class, 'index']);
     });
 
@@ -60,6 +68,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/income/{type}/{value}', [HomeController::class, 'income']);
     Route::get('/spending/{type}/{value}', [HomeController::class, 'spending']);
     Route::get('/history/{year}', [HomeController::class, 'history']);
+
+    Route::prefix('laporan')->group(function () {
+        Route::post('/', [LaporanController::class, 'downloadReport'])
+        ->middleware(['notheadbar'])
+        ->name('download-report');
+    });
 
     Route::middleware(['owner'])->group(function () {
         
@@ -69,15 +83,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/delete', [UserActivityController::class, 'delete'])->name('delete-activity');
         });
 
-        Route::prefix('laporan')->group(function () {
-            Route::post('/', [LaporanController::class, 'downloadReport'])->name('download-report');
-        });
-
         Route::prefix('pegawai')->group(function () {
             Route::get('/', [PegawaiController::class, 'data'])->name('data-pegawai');
             Route::post('/', [PegawaiController::class, 'create']);
             Route::get('/search', [PegawaiController::class, 'search'])->name('data-pegawai');
-            Route::delete('/delete/{id}', [PegawaiController::class, 'delete']);
+            Route::delete('/delete/{id}', [PegawaiController::class, 'delete'])->name('delete-pegawai');
             Route::get('/mail', [PegawaiController::class, 'mail']);
         });
     });

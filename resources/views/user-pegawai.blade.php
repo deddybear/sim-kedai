@@ -89,6 +89,18 @@
                             </div>
                         </div>
                         
+                        {{-- Roles --}}
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Jabatan</label>
+                            <div class="col-md-12">
+                                <select name="role" id="role" class="form-control" required>
+                                    <option selected>Pilih Jabatan</option>
+                                    <option value="1">Keuangan</option>
+                                    <option value="2">Headbar</option>
+                                </select>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="ok">Save changes</button>
