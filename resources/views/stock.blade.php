@@ -89,6 +89,7 @@
                                     <option value="" selected>Silahkan Dipilih</option>
                                     <option value="Bahan Baku">Bahan Baku</option>
                                     <option value="Tools/Peralatan">Tools/Peralatan</option>
+                                    <option value="Lain-Lain">Lain - Lain</option>
                                 </select>
                             </div>
                         </div>
