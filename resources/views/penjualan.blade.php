@@ -89,8 +89,9 @@
                                 <select class="form-control" name="category" required>
                                     <option value="" selected>Silahkan Dipilih</option>
                                     <option value="Blended Coffe">Blended Coffe</option>
-                                    <option value="Mixology Bar">Mixology Bar</option>
                                     <option value="Blended Cream">Blended Cream</option>
+                                    <option value="Blended Cream">Classic</option>
+                                    <option value="Mixology Bar">Mixology Bar</option>
                                     <option value="Signature">Signature</option>
                                     <option value="Snack">Snack</option>
                                 </select>

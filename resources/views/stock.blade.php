@@ -108,8 +108,12 @@
                             <div class="col-md-12">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Satuan</span>
-                                    <input type="text" class="form-control" name="satuan" id="satuan" 
-                                    placeholder="Kg / Pcs" required>
+                                    <select name="satuan" id="satuan" class="form-control">
+                                        <option value="Kg">Kg</option>
+                                        <option value="Pcs">Pcs</option>
+                                        <option value="Liter">Liter</option>
+                                        <option value="Lain-Lain">Lain - Lain</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

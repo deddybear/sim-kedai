@@ -92,6 +92,7 @@
                                     <option value="" selected>Silahkan Dipilih</option>
                                     <option value="Bahan Baku">Bahan Baku</option>
                                     <option value="Tools/Peralatan">Tools/Peralatan</option>
+                                    <option value="Lain-Lain">Lain - Lain</option>
                                 </select>
                             </div>
                         </div>
@@ -111,8 +112,14 @@
                             <div class="col-md-12">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Satuan</span>
-                                    <input type="text" class="form-control" name="satuan" id="satuan" 
-                                    placeholder="Kg / Pcs" required>
+                                    <select name="satuan" id="satuan" class="form-control">
+                                        <option value="Kg">Kg</option>
+                                        <option value="Pcs">Pcs</option>
+                                        <option value="Liter">Liter</option>
+                                        <option value="Lain-Lain">Lain - Lain</option>
+                                    </select>
+                                    {{-- <input type="text" class="form-control" name="satuan" id="satuan" 
+                                    placeholder="Kg / Pcs / Liter / Lain-Lain" required> --}}
                                 </div>
                             </div>
                         </div>
